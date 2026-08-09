@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#eae6e0">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#eae6e0"/>
+    <circle cx="100" cy="100" r="45" fill="#f5f3f0" stroke="#2d2416" stroke-width="2"/>
+    <path d="M 100 70 L 115 95 L 130 85 Q 115 110 100 120 Q 85 110 70 85 L 85 95 Z" fill="#2d2416"/>
+    <text x="100" y="155" font-family="League Spartan, sans-serif" font-size="14" font-weight="600" text-anchor="middle" fill="#6b5f52">VELA</text>
+  </svg>
+</template>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:oklch(0.915 0.015 70);color:oklch(0.21 0.01 265);font-family:'Montserrat',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    img{user-select:none;-webkit-user-drag:none}
+    .vela-dive-scroll::-webkit-scrollbar{width:0;height:0}
+    .vela-panel-scroll::-webkit-scrollbar{width:0;height:0}
+    @keyframes velaBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.014)}}
+    @keyframes velaGlow{0%,100%{opacity:.55}50%{opacity:.92}}
+    @keyframes velaCue{0%{transform:translateY(-110%);opacity:0}25%{opacity:1}100%{transform:translateY(120%);opacity:0}}
+    @keyframes velaPulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.9);opacity:0}}
+    @keyframes velaMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  </style>
+</helmet>
+
+<div ref="{{ preloaderRef }}" style="position:fixed;inset:0;z-index:300;background:oklch(0.15 0.012 265);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity 0.7s ease;pointer-events:all">
+  <img src="assets/vela-logo-light.png" alt="Vela" style="height:30px;width:auto;display:block">
+  <div style="width:130px;height:1px;background:oklch(0.95 0.004 265 / 0.18);position:relative;overflow:hidden">
+    <div ref="{{ loadBarRef }}" style="position:absolute;left:0;top:0;height:100%;width:0%;background:oklch(0.95 0.004 265);transition:width 0.25s ease"></div>
+  </div>
+</div>
+
+<div ref="{{ loopFadeRef }}" style="position:fixed;inset:0;z-index:250;background:oklch(0.12 0.012 265);opacity:0;pointer-events:none;transition:opacity 0.4s ease"></div>
+
+<div ref="{{ navRef }}" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:26px 38px;color:oklch(0.95 0.004 265);transition:color .5s ease;pointer-events:none">
+  <div style="position:relative;height:22px">
+    <img ref="{{ navLogoLightRef }}" src="assets/vela-logo-light.png" alt="Vela" style="height:22px;width:auto;display:block;transition:opacity .5s ease">
+    <img ref="{{ navLogoDarkRef }}" src="assets/vela-logo-dark.png" alt="Vela" style="position:absolute;left:0;top:0;height:22px;width:auto;display:block;opacity:0;transition:opacity .5s ease">
+  </div>
+  <div style="display:flex;gap:30px;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;pointer-events:auto">
+    <span style="opacity:.82;cursor:pointer">Programs</span>
+    <span style="opacity:.82;cursor:pointer">Approach</span>
+    <span style="opacity:.82;cursor:pointer">Begin</span>
+  </div>
+</div>
+
+<div ref="{{ wrapRef }}" data-screen-label="Hero" style="position:relative;height:220vh;z-index:1">
+  <div style="position:sticky;top:0;height:100vh;overflow:hidden;background:oklch(0.16 0.012 265)">
+
+    <div style="position:absolute;inset:0;animation:velaBreathe 11s ease-in-out infinite">
+      <div ref="{{ wideRef }}" style="position:absolute;inset:0;transform-origin:53% 44%;will-change:transform">
+        <img src="assets/frame1.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <img ref="{{ litRef }}" src="assets/frame2.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0">
+        <div ref="{{ glowGateRef }}" style="position:absolute;left:6%;top:46%;width:26%;height:34%;opacity:0;mix-blend-mode:screen;pointer-events:none">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, oklch(0.86 0.09 75 / 0.95), oklch(0.8 0.1 70 / 0.35) 45%, transparent 70%);animation:velaGlow 6s ease-in-out infinite;filter:blur(6px)"></div>
+        </div>
+      </div>
+      <video ref="{{ heroVideoRef }}" src="assets/first-scroll.mp4" preload="auto" muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:opacity"></video>
+    </div>
+
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, oklch(0.14 0.012 265 / 0.34) 0%, transparent 24%, transparent 52%, oklch(0.12 0.012 265 / 0.58) 100%)"></div>
+
+    <div ref="{{ heroRef }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;color:oklch(0.98 0.004 265);will-change:transform,opacity;filter:drop-shadow(0 0 1.2px oklch(0 0 0 / 0.4)) drop-shadow(0 0 0.5px oklch(0 0 0 / 0.25))">
+      <div style="font-size:12px;letter-spacing:0.4em;text-transform:uppercase;font-weight:500;opacity:.86;margin-bottom:28px;padding-left:0.4em;text-shadow:0 1px 2px oklch(0 0 0 / 0.3)">Recovery at Home</div>
+      <h1 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(40px,6.6vw,94px);line-height:1.0;letter-spacing:-0.01em;margin:0;max-width:15ch;text-wrap:balance;text-shadow:0 2px 4px oklch(0 0 0 / 0.35)">Accelerating at-home rehabilitation</h1>
+      <p style="font-size:clamp(15px,1.5vw,19px);font-weight:300;opacity:.86;margin:30px 0 0;max-width:44ch;line-height:1.6;text-shadow:0 1px 3px oklch(0 0 0 / 0.32)">Clinician-guided programs that turn your living room into the place you heal, faster and calmer on your own terms.</p>
+    </div>
+
+    <div ref="{{ diveBtnRef }}" style="position:absolute;left:0;right:0;bottom:13%;display:flex;flex-direction:column;align-items:center;gap:18px;opacity:0;pointer-events:none;will-change:opacity">
+      <button onClick="{{ enterDive }}" style="position:relative;display:inline-flex;align-items:center;gap:14px;cursor:pointer;border:none;background:oklch(0.99 0 0);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:oklch(0.18 0.012 265);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;padding:18px 32px;border-radius:999px;box-shadow:0 14px 36px oklch(0 0 0 / 0.45);transition:transform .3s ease,box-shadow .3s ease" style-hover="transform:translateY(-3px);box-shadow:0 20px 46px oklch(0 0 0 / 0.5)">
+        <span style="position:relative;display:inline-flex;width:9px;height:9px;align-items:center;justify-content:center">
+          <span style="position:absolute;inset:0;border-radius:999px;border:1px solid currentColor;animation:velaPulse 2.6s ease-out infinite"></span>
+          <span style="width:5px;height:5px;border-radius:999px;background:currentColor"></span>
+        </span>
+        Dive Deep
+      </button>
+      <span style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:oklch(0.98 0.004 265 / 0.74)">Step inside the world of Vela</span>
+    </div>
+
+    <div style="position:absolute;right:0;bottom:0;z-index:5;width:300px;height:230px;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 26px 26px 0;background:radial-gradient(ellipse at 100% 100%, oklch(0.14 0.012 265 / 1) 0%, oklch(0.14 0.012 265 / 1) 40%, oklch(0.14 0.012 265 / 0.7) 60%, transparent 82%);pointer-events:none">
+      <a href="mailto:hello@vela.com" style="display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;background:oklch(0.14 0.012 265 / 0.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:oklch(0.98 0.004 265);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:14px 24px;border-radius:999px;box-shadow:0 14px 36px oklch(0 0 0 / 0.45);text-decoration:none;transition:transform .3s ease,box-shadow .3s ease;pointer-events:auto" style-hover="transform:translateY(-3px);box-shadow:0 20px 46px oklch(0 0 0 / 0.5)">
+        <span style="width:6px;height:6px;border-radius:999px;background:currentColor"></span>
+        Contact
+      </a>
+    </div>
+
+    <div ref="{{ cueRef }}" style="position:absolute;bottom:34px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;color:oklch(0.98 0.004 265)">
+      <span style="font-size:10.5px;letter-spacing:0.3em;text-transform:uppercase;opacity:.8">Scroll</span>
+      <div style="position:relative;width:1px;height:46px;background:oklch(0.98 0.004 265 / 0.3);overflow:hidden">
+        <div style="position:absolute;left:0;top:0;width:1px;height:50%;background:oklch(0.98 0.004 265);animation:velaCue 2.4s cubic-bezier(.7,0,.3,1) infinite"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main data-screen-label="Main content" style="position:relative;z-index:2;background:oklch(0.915 0.015 70)">
+
+  <div ref="{{ authStripeRef }}" style="overflow:hidden;border-top:1px solid oklch(0.88 0.012 70);border-bottom:1px solid oklch(0.88 0.012 70);padding:22px 0;background:oklch(0.935 0.012 70)">
+    <div style="display:flex;width:max-content;animation:velaMarquee 34s linear infinite;will-change:transform">
+      <div style="display:flex;align-items:center;gap:54px;padding-right:54px;font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:oklch(0.46 0.008 265)">
+        <span>100% Wire-Free Design</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Heat, Compression &amp; Vibration</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Universal Adjustable Fit</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Designed for Active Wear</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Rewards Voluntary Motion</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Passively Monitors Every Step</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Real-Time Progress Dashboard</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>FSA / HSA Eligible</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>30-Day At-Home Trial</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Backed by Leading Physical Therapists</span><span style="color:oklch(0.78 0.006 265)">·</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:54px;padding-right:54px;font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:oklch(0.46 0.008 265)" aria-hidden="true">
+        <span>100% Wire-Free Design</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Heat, Compression &amp; Vibration</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Universal Adjustable Fit</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Designed for Active Wear</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Rewards Voluntary Motion</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Passively Monitors Every Step</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Real-Time Progress Dashboard</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>FSA / HSA Eligible</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>30-Day At-Home Trial</span><span style="color:oklch(0.78 0.006 265)">·</span>
+        <span>Backed by Leading Physical Therapists</span><span style="color:oklch(0.78 0.006 265)">·</span>
+      </div>
+    </div>
+  </div>
+
+  <section ref="{{ approachRef }}" style="max-width:1100px;margin:0 auto;padding:clamp(100px,15vh,190px) 32px clamp(80px,11vh,150px)">
+    <div style="font-size:12px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:oklch(0.5 0.008 265);margin-bottom:30px">The Vela approach</div>
+    <h2 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(32px,4.6vw,62px);line-height:1.06;letter-spacing:-0.01em;margin:0;max-width:20ch;text-wrap:balance">Recovery happens at home, and Vela makes sure it happens faster.</h2>
+    <p style="font-size:clamp(16px,1.4vw,19px);font-weight:300;line-height:1.64;color:oklch(0.46 0.008 265);max-width:54ch;margin:34px 0 0">Guided rehabilitation, clinician oversight, and a gentle daily rhythm designed around the room you already rest in and the pace your body actually wants.</p>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:0 32px clamp(90px,13vh,170px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(28px,4vw,64px);border-top:1px solid oklch(0.86 0.005 265);padding-top:clamp(40px,6vh,72px)">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:22px;color:oklch(0.62 0.008 265)">01</div>
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:26px;margin:0;letter-spacing:0.01em;text-transform:uppercase">Assess</h3>
+        <p style="font-size:15.5px;font-weight:300;line-height:1.6;color:oklch(0.46 0.008 265);margin:0;max-width:34ch">Understanding your baseline mobility and balance, measured objectively the moment you begin.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:22px;color:oklch(0.62 0.008 265)">02</div>
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:26px;margin:0;letter-spacing:0.01em;text-transform:uppercase">Guide</h3>
+        <p style="font-size:15.5px;font-weight:300;line-height:1.6;color:oklch(0.46 0.008 265);margin:0;max-width:34ch">Translating physical steps into engaging, interactive targets that adapt to how you move each day.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:22px;color:oklch(0.62 0.008 265)">03</div>
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:26px;margin:0;letter-spacing:0.01em;text-transform:uppercase">Progress</h3>
+        <p style="font-size:15.5px;font-weight:300;line-height:1.6;color:oklch(0.46 0.008 265);margin:0;max-width:34ch">Tracking your objective improvements over time: range, strength, and consistency, quietly recorded.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:0 32px clamp(80px,11vh,150px)">
+    <div style="font-size:12px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:oklch(0.5 0.008 265);margin-bottom:34px">Who Vela is for</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,3vw,40px)">
+
+      <div ref="{{ cardARef }}" onClick="{{ openPanelA }}" style="background:oklch(0.955 0.004 265);border-radius:20px;padding:clamp(34px,4vw,52px);box-shadow:14px 14px 32px oklch(0.62 0.012 265 / 0.32), -12px -12px 28px oklch(1 0 0 / 0.9);display:flex;flex-direction:column;gap:18px;cursor:pointer;transition:transform .35s ease,box-shadow .35s ease" style-hover="transform:translateY(-6px);box-shadow:18px 18px 42px oklch(0.62 0.012 265 / 0.38), -14px -14px 32px oklch(1 0 0 / 0.95)">
+        <div style="font-size:11.5px;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.008 265)">For everyday users &amp; athletes</div>
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:400;font-size:clamp(25px,2.7vw,34px);line-height:1.08;margin:0;letter-spacing:-0.005em">Recovery that moves with you.</h3>
+        <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0;max-width:40ch">Reclaim your mobility and eliminate downtime. Transform boring routines into active, gamified recovery right in your living room.</p>
+        <span style="margin-top:8px;font-size:12.5px;letter-spacing:0.06em;font-weight:600;color:oklch(0.21 0.01 265);display:inline-flex;align-items:center;gap:8px">Enter the consumer pathway <span style="font-size:16px">→</span></span>
+      </div>
+
+      <div ref="{{ cardBRef }}" onClick="{{ openPanelB }}" style="background:oklch(0.18 0.012 265);border-radius:20px;padding:clamp(34px,4vw,52px);box-shadow:14px 14px 34px oklch(0.55 0.012 265 / 0.34), -10px -10px 24px oklch(1 0 0 / 0.04);display:flex;flex-direction:column;gap:18px;cursor:pointer;color:oklch(0.93 0.004 265);transition:transform .35s ease,box-shadow .35s ease" style-hover="transform:translateY(-6px);box-shadow:18px 18px 44px oklch(0.55 0.012 265 / 0.4), -12px -12px 28px oklch(1 0 0 / 0.06)">
+        <div style="font-size:11.5px;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;color:oklch(0.7 0.006 265)">For enterprise &amp; clinics</div>
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:400;font-size:clamp(25px,2.7vw,34px);line-height:1.08;margin:0;letter-spacing:-0.005em">Clinical-grade data, at scale.</h3>
+        <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.78 0.006 265);margin:0;max-width:40ch">Scale patient outcomes and unlock Remote Therapeutic Monitoring (RTM) billing with our seamless, API-ready objective tracking data.</p>
+        <span style="margin-top:8px;font-size:12.5px;letter-spacing:0.06em;font-weight:600;color:oklch(0.95 0.004 265);display:inline-flex;align-items:center;gap:8px">Enter the enterprise pathway <span style="font-size:16px">→</span></span>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="max-width:1100px;margin:0 auto;padding:0 32px clamp(64px,9vh,110px)">
+    <div style="border-top:1px solid oklch(0.86 0.005 265);padding-top:clamp(40px,6vh,64px);display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,64px);align-items:baseline">
+      <div style="flex:0 0 auto;font-size:12px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:oklch(0.5 0.008 265)">Origin</div>
+      <p style="flex:1 1 320px;font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(20px,2.4vw,30px);line-height:1.36;margin:0;color:oklch(0.27 0.01 265);max-width:36ch;text-wrap:balance">Vela is built by a team of robotics researchers from NYU, where rehabilitation science meets hardware design. We build alongside an advisory bench of practicing physical therapists, so every decision is grounded in how people actually recover.</p>
+    </div>
+  </section>
+
+  <section style="max-width:1100px;margin:0 auto;padding:0 32px clamp(80px,11vh,150px)">
+    <div style="font-size:12px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:oklch(0.5 0.008 265);margin-bottom:14px">Questions</div>
+    <div style="border-bottom:1px solid oklch(0.86 0.005 265)">
+
+      <div style="border-top:1px solid oklch(0.86 0.005 265)">
+        <button onClick="{{ toggleFaq0 }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;background:none;border:none;cursor:pointer;padding:24px 0;text-align:left;font-family:'League Spartan',sans-serif;font-weight:400;font-size:clamp(19px,2vw,25px);color:oklch(0.21 0.01 265)">
+          <span>How do I get the right fit?</span>
+          <span style="{{ faqIcon0 }}">+</span>
+        </button>
+        <div style="{{ faqPanel0 }}">
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0 0 24px;max-width:62ch">Each Vela ships in adjustable, low-profile sizing that conforms to the limb in a single calibration pass. The embedded sensor matrix confirms correct placement before any session begins — so fit is never a guess.</p>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid oklch(0.86 0.005 265)">
+        <button onClick="{{ toggleFaq1 }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;background:none;border:none;cursor:pointer;padding:24px 0;text-align:left;font-family:'League Spartan',sans-serif;font-weight:400;font-size:clamp(19px,2vw,25px);color:oklch(0.21 0.01 265)">
+          <span>How does Vela connect to the app?</span>
+          <span style="{{ faqIcon1 }}">+</span>
+        </button>
+        <div style="{{ faqPanel1 }}">
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0 0 24px;max-width:62ch">Vela pairs over Bluetooth LE with the companion app on iOS and Android, running live data tracking and AR guidance on-device. An optional cloud sync keeps your history and lets your clinician follow along.</p>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid oklch(0.86 0.005 265)">
+        <button onClick="{{ toggleFaq2 }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;background:none;border:none;cursor:pointer;padding:24px 0;text-align:left;font-family:'League Spartan',sans-serif;font-weight:400;font-size:clamp(19px,2vw,25px);color:oklch(0.21 0.01 265)">
+          <span>When will my pre-order ship?</span>
+          <span style="{{ faqIcon2 }}">+</span>
+        </button>
+        <div style="{{ faqPanel2 }}">
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0 0 24px;max-width:62ch">Pre-orders are reserved against our first production run and ship in staged waves. You'll receive a confirmed manufacturing window — and tracking — the moment your wave enters assembly.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="background:oklch(0.18 0.012 265);color:oklch(0.94 0.004 265)">
+    <div style="max-width:1100px;margin:0 auto;padding:clamp(100px,15vh,180px) 32px;display:flex;flex-direction:column;align-items:flex-start;gap:34px">
+      <h2 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(32px,4.8vw,66px);line-height:1.04;margin:0;max-width:18ch;text-wrap:balance">Begin Where You Already Feel At Ease</h2>
+      <p style="font-size:clamp(16px,1.4vw,19px);font-weight:300;line-height:1.6;color:oklch(0.78 0.006 265);max-width:48ch;margin:0">Start with a free assessment. No clinic visit, no waiting room, just a conversation and a plan.</p>
+      <button style="margin-top:8px;border:none;cursor:pointer;background:oklch(0.99 0 0);color:oklch(0.18 0.012 265);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:18px 40px;border-radius:999px;box-shadow:0 12px 34px oklch(0 0 0 / 0.4);transition:transform .25s ease,box-shadow .25s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 44px oklch(0 0 0 / 0.5)">Reserve Your Vela System</button>
+    </div>
+  </section>
+
+  <div style="background:oklch(0.915 0.015 70);text-align:center;padding:54px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+    <div style="width:34px;height:34px;border-radius:999px;border:1px solid oklch(0.62 0.008 265);display:flex;align-items:center;justify-content:center;color:oklch(0.5 0.008 265);font-size:16px">↺</div>
+    <span style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:oklch(0.55 0.008 265)">Keep scrolling — back to the beginning</span>
+  </div>
+
+  <footer style="max-width:1180px;margin:0 auto;padding:24px 32px 60px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;color:oklch(0.5 0.008 265);font-size:13px">
+    <img src="assets/vela-logo-dark.png" alt="Vela" style="height:19px;width:auto;display:block">
+    <div style="display:flex;gap:26px;letter-spacing:0.04em"><span>Programs</span><span>Approach</span><span>Clinicians</span><span>Contact</span></div>
+    <div style="opacity:.7">© 2026 Vela Health</div>
+    <p style="flex-basis:100%;margin:14px 0 0;font-size:11.5px;line-height:1.55;color:oklch(0.6 0.006 265);max-width:96ch;letter-spacing:0.01em">Vela is a general wellness product intended to support comfort, mobility, and active recovery. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease or medical condition.</p>
+  </footer>
+</main>
+
+<div ref="{{ diveOverlayRef }}" data-screen-label="Dive Deep overlay" style="position:fixed;inset:0;z-index:150;display:none;opacity:0;transition:opacity 0.55s ease;background:oklch(0.1 0.01 265);pointer-events:none">
+  <div ref="{{ diveScrollRef }}" class="vela-dive-scroll" style="position:absolute;inset:0;overflow-y:scroll;overflow-x:hidden">
+    <div style="height:900vh;position:relative">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden">
+        <video ref="{{ diveVideoRef }}" src="assets/second-scroll.mp4" preload="auto" muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:opacity"></video>
+        <video ref="{{ thirdVideoRef }}" src="assets/third-scroll.mp4" preload="auto" muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:opacity"></video>
+        <video ref="{{ vid4Ref }}" src="assets/scroll-4.mp4" preload="auto" muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:opacity"></video>
+        <video ref="{{ vid5Ref }}" src="assets/scroll-5.mp4" preload="auto" muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:opacity"></video>
+        <video ref="{{ vid6Ref }}" src="assets/scroll-6.mp4" preload="auto" muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:opacity"></video>
+        <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, oklch(0.1 0.01 265 / 0.5) 0%, transparent 22%, transparent 60%, oklch(0.08 0.01 265 / 0.82) 100%)"></div>
+        <div style="position:absolute;right:0;bottom:0;z-index:5;width:300px;height:230px;display:flex;align-items:flex-end;justify-content:flex-end;padding:0 26px 26px 0;background:radial-gradient(ellipse at 100% 100%, oklch(0.08 0.01 265 / 1) 0%, oklch(0.08 0.01 265 / 1) 40%, oklch(0.08 0.01 265 / 0.7) 60%, transparent 82%);pointer-events:none">
+          <a href="mailto:hello@vela.com" style="display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;background:oklch(0.98 0.004 265 / 0.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:oklch(0.14 0.012 265);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:14px 24px;border-radius:999px;box-shadow:0 14px 36px oklch(0 0 0 / 0.5);text-decoration:none;transition:transform .3s ease,box-shadow .3s ease;pointer-events:auto" style-hover="transform:translateY(-3px);box-shadow:0 20px 46px oklch(0 0 0 / 0.55)">
+            <span style="width:6px;height:6px;border-radius:999px;background:currentColor"></span>
+            Contact
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;inset:0;pointer-events:none;color:oklch(0.97 0.004 265)">
+    <button onClick="{{ exitDive }}" style="position:absolute;top:30px;right:34px;pointer-events:auto;cursor:pointer;display:inline-flex;align-items:center;gap:10px;border:none;background:oklch(0.97 0.004 265 / 0.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:oklch(0.97 0.004 265);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:12px 18px;border-radius:999px;transition:background .3s ease" style-hover="background:oklch(0.97 0.004 265 / 0.95);color:oklch(0.12 0.01 265)">Close ✕</button>
+
+    <div style="position:absolute;top:30px;left:34px;display:flex;align-items:center;gap:12px">
+      <img src="assets/vela-logo-light.png" alt="Vela" style="height:16px;width:auto;display:block">
+      <span style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:16px;letter-spacing:0.24em;text-transform:uppercase;opacity:.66">· Deep</span>
+    </div>
+
+    <div style="position:absolute;right:36px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px">
+      <span ref="{{ divePctRef }}" style="font-size:12px;letter-spacing:0.1em;font-variant-numeric:tabular-nums;font-weight:500;opacity:.85">0%</span>
+      <div style="position:relative;width:2px;height:230px;background:oklch(0.97 0.004 265 / 0.18);border-radius:2px;overflow:hidden">
+        <div ref="{{ diveProgressRef }}" style="position:absolute;left:0;top:0;width:100%;height:0%;background:oklch(0.97 0.004 265);border-radius:2px"></div>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:38px;bottom:46px;max-width:46ch">
+      <div ref="{{ diveNumRef }}" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;opacity:.62;margin-bottom:14px">01 / The Sanctuary</div>
+      <div ref="{{ diveLabelRef }}" style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(28px,3.6vw,48px);line-height:1.04;margin-bottom:16px;text-wrap:balance">The Sanctuary</div>
+      <div ref="{{ diveBodyRef }}" style="font-size:clamp(14px,1.2vw,16.5px);font-weight:300;line-height:1.6;color:oklch(0.92 0.004 265 / 0.82);max-width:42ch">Recovery shouldn't feel like a clinical chore. It begins right where you already feel at ease, entirely on your terms.</div>
+    </div>
+
+    <div ref="{{ diveCueRef }}" style="position:absolute;left:50%;bottom:40px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;transition:opacity .4s ease">
+      <span style="font-size:10.5px;letter-spacing:0.26em;text-transform:uppercase;opacity:.7">Scroll to descend</span>
+      <div style="position:relative;width:1px;height:38px;background:oklch(0.97 0.004 265 / 0.3);overflow:hidden">
+        <div style="position:absolute;left:0;top:0;width:1px;height:50%;background:oklch(0.97 0.004 265);animation:velaCue 2.2s cubic-bezier(.7,0,.3,1) infinite"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ref="{{ panelARef }}" data-screen-label="Sub-page · Consumer" style="position:fixed;display:none;opacity:0;z-index:200;overflow:hidden;background:oklch(0.925 0.006 265);box-shadow:0 40px 100px oklch(0.15 0.01 265 / 0.35)">
+  <div ref="{{ panelAContentRef }}" class="vela-panel-scroll" style="position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;color:oklch(0.21 0.01 265)">
+    <button onClick="{{ closePanel }}" style="position:fixed;top:26px;right:30px;z-index:6;cursor:pointer;border:none;background:oklch(0.99 0 0);color:oklch(0.21 0.01 265);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:12px 18px;border-radius:999px;box-shadow:8px 8px 20px oklch(0.62 0.012 265 / 0.3), -6px -6px 16px oklch(1 0 0 / 0.9)">Close ✕</button>
+
+    <div style="max-width:1080px;margin:0 auto;padding:clamp(90px,12vh,140px) 32px clamp(80px,11vh,140px)">
+      <div style="font-size:12px;letter-spacing:0.24em;text-transform:uppercase;font-weight:600;color:oklch(0.5 0.008 265);margin-bottom:24px">For everyday users &amp; athletes</div>
+      <h1 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(38px,6vw,80px);line-height:0.98;letter-spacing:-0.015em;margin:0;max-width:16ch;text-wrap:balance">Reclaim your mobility. Lose the downtime.</h1>
+      <p style="font-size:clamp(16px,1.5vw,20px);font-weight:300;line-height:1.6;color:oklch(0.46 0.008 265);max-width:52ch;margin:32px 0 0">Active recovery that fits your life — guided, gamified, and entirely at home. Put the sleeve on, follow the targets, and keep moving between training days.</p>
+
+      <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;margin-top:clamp(64px,9vh,110px)">
+        <div style="position:relative;width:100%;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.9 0.006 265) 0 14px, oklch(0.94 0.006 265) 14px 28px);display:flex;align-items:center;justify-content:center;border:1px solid oklch(0.86 0.005 265)">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:0.08em;color:oklch(0.5 0.008 265);text-transform:uppercase">[ sleeve in home environment ]</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:24px;margin:0;text-transform:uppercase;letter-spacing:0.01em">At Home, On Your Terms</h3>
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0">No clinic, no waiting room. The whole program lives in the room you already rest in, slip it on between meetings, sets, or episodes.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(28px,4vw,56px);align-items:center;margin-top:clamp(48px,7vh,88px)">
+        <div style="display:flex;flex-direction:column;gap:14px;order:2">
+          <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:24px;margin:0;text-transform:uppercase;letter-spacing:0.01em">Mobility, Gamified</h3>
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.46 0.008 265);margin:0">A Unity-built AR layer turns each session into interactive targets. You always know the next move and every rep feeds a streak worth keeping.</p>
+        </div>
+        <div style="position:relative;width:100%;aspect-ratio:3/4;max-height:480px;border-radius:24px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.9 0.006 265) 0 14px, oklch(0.94 0.006 265) 14px 28px);display:flex;align-items:center;justify-content:center;border:1px solid oklch(0.86 0.005 265);order:1">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:0.08em;color:oklch(0.5 0.008 265);text-transform:uppercase;text-align:center;padding:0 20px">[ AR unity app — phone mockup ]</span>
+        </div>
+      </div>
+
+      <div style="margin-top:clamp(48px,7vh,88px)">
+        <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:24px;margin:0 0 24px;text-transform:uppercase;letter-spacing:0.01em">In The Box</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)">
+          <div style="position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.9 0.006 265) 0 12px, oklch(0.94 0.006 265) 12px 24px);display:flex;align-items:flex-end;justify-content:flex-start;border:1px solid oklch(0.86 0.005 265)"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:0.06em;color:oklch(0.5 0.008 265);text-transform:uppercase;padding:16px">[ sleeve ]</span></div>
+          <div style="position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.9 0.006 265) 0 12px, oklch(0.94 0.006 265) 12px 24px);display:flex;align-items:flex-end;justify-content:flex-start;border:1px solid oklch(0.86 0.005 265)"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:0.06em;color:oklch(0.5 0.008 265);text-transform:uppercase;padding:16px">[ charging dock ]</span></div>
+          <div style="position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.9 0.006 265) 0 12px, oklch(0.94 0.006 265) 12px 24px);display:flex;align-items:flex-end;justify-content:flex-start;border:1px solid oklch(0.86 0.005 265)"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:0.06em;color:oklch(0.5 0.008 265);text-transform:uppercase;padding:16px">[ travel case ]</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:clamp(64px,9vh,110px);display:flex;flex-direction:column;align-items:flex-start;gap:20px">
+        <h2 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(28px,3.6vw,46px);line-height:1.04;margin:0;max-width:16ch">Be first on the recovery you've been waiting for</h2>
+        <button style="border:none;cursor:pointer;background:oklch(0.18 0.012 265);color:oklch(0.97 0.004 265);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:18px 40px;border-radius:999px;box-shadow:8px 8px 22px oklch(0.62 0.012 265 / 0.32);transition:transform .25s ease" style-hover="transform:translateY(-3px)">Pre-Order Alpha Access</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ref="{{ panelBRef }}" data-screen-label="Sub-page · Enterprise" style="position:fixed;display:none;opacity:0;z-index:200;overflow:hidden;background:oklch(0.16 0.012 265);box-shadow:0 40px 100px oklch(0.05 0.01 265 / 0.5)">
+  <div ref="{{ panelBContentRef }}" class="vela-panel-scroll" style="position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;color:oklch(0.93 0.004 265)">
+    <button onClick="{{ closePanel }}" style="position:fixed;top:26px;right:30px;z-index:6;cursor:pointer;border:none;background:oklch(0.97 0.004 265 / 0.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:oklch(0.95 0.004 265);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:12px 18px;border-radius:999px">Close ✕</button>
+
+    <div style="max-width:1080px;margin:0 auto;padding:clamp(90px,12vh,140px) 32px clamp(80px,11vh,140px)">
+      <div style="font-size:12px;letter-spacing:0.24em;text-transform:uppercase;font-weight:600;color:oklch(0.7 0.006 265);margin-bottom:24px">For enterprise &amp; clinics</div>
+      <h1 style="font-family:'League Spartan',sans-serif;font-weight:300;font-size:clamp(38px,6vw,80px);line-height:0.98;letter-spacing:-0.015em;margin:0;max-width:16ch;text-wrap:balance">Scale outcomes. Unlock RTM revenue.</h1>
+      <p style="font-size:clamp(16px,1.5vw,20px);font-weight:300;line-height:1.6;color:oklch(0.78 0.006 265);max-width:54ch;margin:32px 0 0">Extend your practice beyond the four walls. Vela streams objective recovery data straight into your workflow so compliance, outcomes, and reimbursement all move in the same direction.</p>
+
+      <div style="margin-top:clamp(64px,9vh,110px);position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(135deg, oklch(0.22 0.012 265) 0 16px, oklch(0.2 0.012 265) 16px 32px);display:flex;align-items:center;justify-content:center;border:1px solid oklch(0.32 0.012 265)">
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:0.08em;color:oklch(0.66 0.006 265);text-transform:uppercase">[ clinician dashboard — patient gait data ]</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(28px,4vw,56px);margin-top:clamp(56px,8vh,100px);border-top:1px solid oklch(0.3 0.012 265);padding-top:clamp(40px,6vh,64px)">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:23px;margin:0;text-transform:uppercase;letter-spacing:0.01em;color:oklch(0.95 0.004 265)">RTM Billing, Built In</h3>
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.74 0.006 265);margin:0">Continuous, time-stamped adherence and outcome data is captured automatically. The documentation backbone for Remote Therapeutic Monitoring reimbursement, with no extra admin load on your team.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="font-family:'League Spartan',sans-serif;font-weight:500;font-size:23px;margin:0;text-transform:uppercase;letter-spacing:0.01em;color:oklch(0.95 0.004 265)">API-Ready Integration</h3>
+          <p style="font-size:15.5px;font-weight:300;line-height:1.62;color:oklch(0.74 0.006 265);margin:0">A documented, secure API pushes objective tracking data into your EHR or RPM platform. License the hardware, plug in the stream, and keep clinical eyes on every recovery remotely.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:clamp(64px,9vh,110px);display:flex;flex-wrap:wrap;align-items:center;gap:16px">
+        <button style="border:none;cursor:pointer;background:oklch(0.99 0 0);color:oklch(0.16 0.012 265);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:18px 40px;border-radius:999px;box-shadow:0 12px 30px oklch(0 0 0 / 0.4);transition:transform .25s ease" style-hover="transform:translateY(-3px)">Partner With Vela</button>
+        <button style="cursor:pointer;background:none;border:1px solid oklch(0.5 0.012 265);color:oklch(0.93 0.004 265);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:17px 36px;border-radius:999px;transition:border-color .25s ease,background .25s ease" style-hover="border-color:oklch(0.8 0.006 265);background:oklch(0.97 0.004 265 / 0.06)">Request Demo</button>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100vh&quot;},&quot;glowColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.86 0.09 75)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;autoLoop&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showAuthorityStripe&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  wrapRef = React.createRef();
+  wideRef = React.createRef();
+  litRef = React.createRef();
+  glowGateRef = React.createRef();
+  heroVideoRef = React.createRef();
+  preloaderRef = React.createRef();
+  loadBarRef = React.createRef();
+  loopFadeRef = React.createRef();
+  heroRef = React.createRef();
+  diveBtnRef = React.createRef();
+  cueRef = React.createRef();
+  navRef = React.createRef();
+  navLogoLightRef = React.createRef();
+  navLogoDarkRef = React.createRef();
+  authStripeRef = React.createRef();
+  cardARef = React.createRef();
+  cardBRef = React.createRef();
+  // dive overlay
+  diveOverlayRef = React.createRef();
+  diveScrollRef = React.createRef();
+  diveVideoRef = React.createRef();
+  thirdVideoRef = React.createRef();
+  vid4Ref = React.createRef();
+  vid5Ref = React.createRef();
+  vid6Ref = React.createRef();
+  diveProgressRef = React.createRef();
+  diveNumRef = React.createRef();
+  diveLabelRef = React.createRef();
+  diveBodyRef = React.createRef();
+  divePctRef = React.createRef();
+  diveCueRef = React.createRef();
+  approachRef = React.createRef();
+  // sub-page panels (FLIP)
+  panelARef = React.createRef();
+  panelBRef = React.createRef();
+  panelAContentRef = React.createRef();
+  panelBContentRef = React.createRef();
+
+  state = { faqOpen: -1 };
+  toggleFaq0 = () => this.setState(s => ({ faqOpen: s.faqOpen === 0 ? -1 : 0 }));
+  toggleFaq1 = () => this.setState(s => ({ faqOpen: s.faqOpen === 1 ? -1 : 1 }));
+  toggleFaq2 = () => this.setState(s => ({ faqOpen: s.faqOpen === 2 ? -1 : 2 }));
+
+  componentDidMount() {
+    this._raf = 0;
+    this._diveRaf = 0;
+    this._diveDur = 0;
+    this._thirdDur = 0;
+    this._vid4Dur = 0;
+    this._vid5Dur = 0;
+    this._vid6Dur = 0;
+    this._wrapping = false;
+    this._diveOpen = false;
+    this._panelOpen = null;
+    this._ready = false;
+    this._sceneIdx = -1;
+
+    this._onScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => { this._raf = 0; this.update(); });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll);
+
+    // hero video — loops continuously once buffered
+    const hero = this.heroVideoRef.current;
+    if (hero) {
+      hero.muted = true; hero.loop = true; hero.playsInline = true;
+      const updateBar = () => {
+        if (!hero.buffered.length || !hero.duration) return;
+        const pct = (hero.buffered.end(hero.buffered.length - 1) / hero.duration) * 100;
+        const bar = this.loadBarRef.current;
+        if (bar) bar.style.width = Math.min(pct, 100) + '%';
+      };
+      const onReady = () => {
+        if (this._ready) return;
+        this._ready = true;
+        const pre = this.preloaderRef.current;
+        if (pre) {
+          pre.style.opacity = '0';
+          pre.style.pointerEvents = 'none';
+          setTimeout(() => { if (pre) pre.style.display = 'none'; }, 750);
+        }
+        this.update();
+      };
+      hero.addEventListener('progress', updateBar);
+      hero.addEventListener('loadedmetadata', updateBar);
+      if (hero.readyState >= 4) onReady();
+      else hero.addEventListener('canplaythrough', onReady);
+      hero.load();
+    }
+
+    // dive videos — scrubbed sequentially by scroll
+    const dive = this.diveVideoRef.current;
+    if (dive) {
+      dive.muted = true; dive.loop = true; dive.playsInline = true; dive.pause();
+      const setDur = () => { this._diveDur = dive.duration || 0; };
+      if (dive.readyState >= 1) setDur();
+      else dive.addEventListener('loadedmetadata', setDur);
+      dive.load();
+    }
+    const third = this.thirdVideoRef.current;
+    if (third) {
+      third.muted = true; third.loop = true; third.playsInline = true; third.pause();
+      const setDur = () => { this._thirdDur = third.duration || 0; };
+      if (third.readyState >= 1) setDur();
+      else third.addEventListener('loadedmetadata', setDur);
+      third.load();
+    }
+    [[this.vid4Ref, '_vid4Dur'], [this.vid5Ref, '_vid5Dur'], [this.vid6Ref, '_vid6Dur']].forEach(([ref, key]) => {
+      const v = ref.current;
+      if (!v) return;
+      v.muted = true; v.loop = true; v.playsInline = true; v.pause();
+      const setDur = () => { this[key] = v.duration || 0; };
+      if (v.readyState >= 1) setDur();
+      else v.addEventListener('loadedmetadata', setDur);
+      v.load();
+    });
+
+    this._onDiveScroll = () => {
+      if (this._diveRaf) return;
+      this._diveRaf = requestAnimationFrame(() => { this._diveRaf = 0; this.updateDive(); });
+    };
+
+    this.update();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onScroll);
+    const sc = this.diveScrollRef.current;
+    if (sc) sc.removeEventListener('scroll', this._onDiveScroll);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._diveRaf) cancelAnimationFrame(this._diveRaf);
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  smooth(e0, e1, x) { const t = this.clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); }
+
+  enterDive = () => {
+    const ov = this.diveOverlayRef.current;
+    const sc = this.diveScrollRef.current;
+    if (!ov || !sc) return;
+    this._diveOpen = true;
+    ov.style.display = 'block';
+    void ov.offsetWidth;
+    ov.style.opacity = '1';
+    ov.style.pointerEvents = 'auto';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    sc.scrollTop = 0;
+    sc.addEventListener('scroll', this._onDiveScroll, { passive: true });
+    this.updateDive();
+  };
+
+  exitDive = () => {
+    const ov = this.diveOverlayRef.current;
+    const sc = this.diveScrollRef.current;
+    if (!ov) return;
+    this._diveOpen = false;
+    ov.style.opacity = '0';
+    ov.style.pointerEvents = 'none';
+    if (sc) sc.removeEventListener('scroll', this._onDiveScroll);
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    [this.diveVideoRef, this.thirdVideoRef, this.vid4Ref, this.vid5Ref, this.vid6Ref].forEach(r => { if (r.current && !r.current.paused) r.current.pause(); });
+    setTimeout(() => { if (!this._diveOpen && ov) ov.style.display = 'none'; }, 560);
+  };
+
+  // ---- FLIP panel flow: card fluidly expands to fill the viewport ----
+  openPanelA = () => this.openPanel('A');
+  openPanelB = () => this.openPanel('B');
+
+  openPanel(which) {
+    const card = which === 'A' ? this.cardARef.current : this.cardBRef.current;
+    const panel = which === 'A' ? this.panelARef.current : this.panelBRef.current;
+    const content = which === 'A' ? this.panelAContentRef.current : this.panelBContentRef.current;
+    if (!card || !panel) return;
+    this._panelOpen = which;
+    const r = card.getBoundingClientRect();
+    // FIRST: pin the panel exactly over the clicked card
+    panel.style.display = 'block';
+    panel.style.transition = 'none';
+    panel.style.top = r.top + 'px';
+    panel.style.left = r.left + 'px';
+    panel.style.width = r.width + 'px';
+    panel.style.height = r.height + 'px';
+    panel.style.borderRadius = '20px';
+    panel.style.opacity = '1';
+    if (content) { content.style.transition = 'none'; content.style.opacity = '0'; content.scrollTop = 0; }
+    // LAST: force reflow, then animate to full viewport
+    void panel.offsetWidth;
+    panel.style.transition = 'top .66s cubic-bezier(.66,0,.2,1),left .66s cubic-bezier(.66,0,.2,1),width .66s cubic-bezier(.66,0,.2,1),height .66s cubic-bezier(.66,0,.2,1),border-radius .66s ease';
+    panel.style.top = '0px';
+    panel.style.left = '0px';
+    panel.style.width = '100vw';
+    panel.style.height = '100vh';
+    panel.style.borderRadius = '0px';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      if (this._panelOpen !== which || !content) return;
+      // paint reliably: CSS opacity transitions and WAA both got stuck at 0 here,
+      // so just reveal instantly once the panel has finished expanding.
+      content.style.transition = 'none';
+      content.style.opacity = '1';
+      void content.offsetWidth;
+    }, 480);
+  }
+
+  closePanel = () => {
+    const which = this._panelOpen;
+    if (!which) return;
+    const card = which === 'A' ? this.cardARef.current : this.cardBRef.current;
+    const panel = which === 'A' ? this.panelARef.current : this.panelBRef.current;
+    const content = which === 'A' ? this.panelAContentRef.current : this.panelBContentRef.current;
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    if (content) content.style.opacity = '0';
+    if (!panel || !card) { this._panelOpen = null; return; }
+    const r = card.getBoundingClientRect();
+    panel.style.transition = 'top .6s cubic-bezier(.66,0,.2,1),left .6s cubic-bezier(.66,0,.2,1),width .6s cubic-bezier(.66,0,.2,1),height .6s cubic-bezier(.66,0,.2,1),border-radius .6s ease,opacity .25s ease .45s';
+    panel.style.top = r.top + 'px';
+    panel.style.left = r.left + 'px';
+    panel.style.width = r.width + 'px';
+    panel.style.height = r.height + 'px';
+    panel.style.borderRadius = '20px';
+    panel.style.opacity = '0';
+    this._panelOpen = null;
+    setTimeout(() => { if (panel) panel.style.display = 'none'; }, 660);
+  };
+
+  updateDive() {
+    const sc = this.diveScrollRef.current;
+    if (!sc) return;
+    const max = sc.scrollHeight - sc.clientHeight;
+    let p = max > 0 ? sc.scrollTop / max : 0;
+
+    // reaching the end of Dive Deep exits to the Vela Approach section
+    if (!this._wrapping && sc.scrollTop >= max - 2 && max > 0) {
+      this._wrapping = true;
+      const fade = this.loopFadeRef.current;
+      if (fade) fade.style.opacity = '1';
+      setTimeout(() => {
+        this.exitDive();
+        const target = this.approachRef.current;
+        if (target) {
+          const doc = document.scrollingElement || document.documentElement;
+          doc.scrollTop = target.getBoundingClientRect().top + doc.scrollTop - 0;
+        }
+        setTimeout(() => { if (fade) fade.style.opacity = '0'; this._wrapping = false; }, 90);
+      }, 380);
+      return;
+    }
+
+    // Section pager: each clip plays + loops on its own; scrolling crossfades to
+    // the next section's looping video (no scroll-scrubbing of currentTime).
+    const refs = [this.diveVideoRef, this.thirdVideoRef, this.vid4Ref, this.vid5Ref, this.vid6Ref];
+    const n = refs.length;
+    const seg = 1 / n;
+    const crossW = 0.05;
+    refs.forEach((ref, i) => {
+      const el = ref.current;
+      if (!el) return;
+      const segStart = i * seg;
+      const segEnd = (i + 1) * seg;
+      const fadeIn  = i === 0 ? 1 : this.smooth(segStart - crossW, segStart + crossW, p);
+      const fadeOut = i === n - 1 ? 0 : this.smooth(segEnd - crossW, segEnd + crossW, p);
+      const op = fadeIn * (1 - fadeOut);
+      el.style.opacity = op;
+      // load + play the active (and crossfading) section; pause the rest
+      if (op > 0.015) { if (el.paused) el.play().catch(() => {}); }
+      else if (!el.paused) el.pause();
+    });
+    if (this.diveProgressRef.current) this.diveProgressRef.current.style.height = (p * 100) + '%';
+    if (this.divePctRef.current) this.divePctRef.current.textContent = Math.round(p * 100) + '%';
+    if (this.diveCueRef.current) this.diveCueRef.current.style.opacity = 1 - this.smooth(0, 0.08, p);
+
+    const scenes = [
+      { num: '01 / The Sanctuary', title: 'The Sanctuary', body: 'Recovery shouldn\u2019t feel like a clinical chore. It begins right where you already feel at ease, entirely on your terms.' },
+      { num: '02 / The Seamless Fit', title: 'The Seamless Fit', body: 'Say goodbye to messy wires. Slip into one unified, fully adjustable sleeve designed for immediate and effortless comfort.' },
+      { num: '03 / Synchronized Relief', title: 'Synchronized Relief', body: 'Beneath the surface: dynamic compression, deep thermal warmth, and targeted haptic vibration working in perfect harmony.' },
+      { num: '04 / Active Engagement', title: 'Active Engagement', body: 'Break free from the chair. Physical steps translate into engaging digital targets, transforming routines into a real-time feedback loop.' },
+      { num: '05 / Moving Forward', title: 'Moving Forward', body: 'Reclaim your daily confidence. Move naturally through your own home while Vela quietly measures, validates, and records every step.' }
+    ];
+    const li = Math.min(scenes.length - 1, Math.floor(p * scenes.length));
+    if (this._sceneIdx !== li) {
+      this._sceneIdx = li;
+      const s = scenes[li];
+      if (this.diveNumRef.current) this.diveNumRef.current.textContent = s.num;
+      if (this.diveLabelRef.current) this.diveLabelRef.current.textContent = s.title;
+      if (this.diveBodyRef.current) this.diveBodyRef.current.textContent = s.body;
+    }
+  }
+
+  update() {
+    const clamp = this.clamp.bind(this);
+    const smooth = this.smooth.bind(this);
+    const wrap = this.wrapRef.current;
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const total = wrap.offsetHeight - window.innerHeight;
+    const scrolled = clamp(-rect.top, 0, total);
+    const p = total > 0 ? scrolled / total : 0;
+
+    // 1) light turns on: frame1 -> frame2  [0.00 -> 0.26]
+    const lightP = smooth(0.00, 0.26, p);
+    if (this.wideRef.current) this.wideRef.current.style.transform = `scale(${1 + smooth(0, 1, p) * 0.04})`;
+
+    // 2) hero copy + cue recede  [0.12 -> 0.40]
+    const textOut = smooth(0.12, 0.40, p);
+    if (this.heroRef.current) {
+      this.heroRef.current.style.opacity = 1 - textOut;
+      this.heroRef.current.style.transform = `translateY(${textOut * -28}px)`;
+    }
+    if (this.cueRef.current) this.cueRef.current.style.opacity = 1 - smooth(0.04, 0.24, p);
+
+    // 3) the video crossfades in over the lit still
+    const videoIn = smooth(0.30, 0.62, p);
+    const vid = this.heroVideoRef.current;
+    if (vid) {
+      vid.style.opacity = videoIn;
+      if (this._ready) {
+        if (videoIn >= 0.999) {
+          if (vid.paused) vid.play().catch(() => {});
+        } else {
+          if (!vid.paused) vid.pause();
+          if (vid.currentTime > 0.04) { try { vid.currentTime = 0; } catch (e) {} }
+        }
+      }
+    }
+    if (this.litRef.current) this.litRef.current.style.opacity = lightP;
+    if (this.glowGateRef.current) this.glowGateRef.current.style.opacity = lightP * (1 - videoIn);
+
+    // 4) dive button fades in over the playing video and stays  [0.58 -> 0.84]
+    const diveIn = smooth(0.58, 0.84, p);
+    if (this.diveBtnRef.current) {
+      this.diveBtnRef.current.style.opacity = diveIn;
+      this.diveBtnRef.current.style.pointerEvents = diveIn > 0.45 ? 'auto' : 'none';
+    }
+
+    const past = rect.bottom <= window.innerHeight * 0.62;
+    if (this.navRef.current) this.navRef.current.style.color = past ? 'oklch(0.21 0.01 265)' : 'oklch(0.95 0.004 265)';
+    if (this.navLogoLightRef.current) this.navLogoLightRef.current.style.opacity = past ? '0' : '1';
+    if (this.navLogoDarkRef.current) this.navLogoDarkRef.current.style.opacity = past ? '1' : '0';
+
+    // authority stripe toggle
+    if (this.authStripeRef.current) {
+      this.authStripeRef.current.style.display = (this.props.showAuthorityStripe ?? true) ? 'block' : 'none';
+    }
+
+    // continuous site loop — wrap from the footer back to the top
+    if ((this.props.autoLoop ?? true) && !this._wrapping && !this._diveOpen && !this._panelOpen) {
+      const doc = document.scrollingElement || document.documentElement;
+      if (doc.scrollTop + window.innerHeight >= doc.scrollHeight - 2) {
+        this._wrapping = true;
+        const fade = this.loopFadeRef.current;
+        if (fade) fade.style.opacity = '1';
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          setTimeout(() => { if (fade) fade.style.opacity = '0'; this._wrapping = false; }, 100);
+        }, 380);
+      }
+    }
+
+    // glow theming
+    const glow = this.props.glowColor;
+    if (glow && this.glowGateRef.current && this._glow !== glow) {
+      const inner = this.glowGateRef.current.firstElementChild;
+      if (inner) inner.style.background = `radial-gradient(ellipse at 50% 50%, ${glow}, transparent 70%)`;
+      this._glow = glow;
+    }
+  }
+
+  renderVals() {
+    const fo = this.state.faqOpen;
+    const panel = i => 'overflow:hidden;transition:max-height .55s cubic-bezier(.4,0,.2,1),opacity .4s ease;' + (fo === i ? 'max-height:240px;opacity:1;' : 'max-height:0;opacity:0;');
+    const icon = i => 'display:inline-block;font-size:26px;font-weight:300;line-height:1;color:oklch(0.5 0.008 265);transition:transform .45s cubic-bezier(.4,0,.2,1);transform:rotate(' + (fo === i ? '45deg' : '0deg') + ')';
+    return {
+      faqPanel0: panel(0), faqPanel1: panel(1), faqPanel2: panel(2),
+      faqIcon0: icon(0), faqIcon1: icon(1), faqIcon2: icon(2),
+      toggleFaq0: this.toggleFaq0, toggleFaq1: this.toggleFaq1, toggleFaq2: this.toggleFaq2,
+      wrapRef: this.wrapRef, wideRef: this.wideRef, litRef: this.litRef,
+      glowGateRef: this.glowGateRef, heroVideoRef: this.heroVideoRef, heroRef: this.heroRef,
+      diveBtnRef: this.diveBtnRef, cueRef: this.cueRef, navRef: this.navRef,
+      navLogoLightRef: this.navLogoLightRef, navLogoDarkRef: this.navLogoDarkRef,
+      authStripeRef: this.authStripeRef, cardARef: this.cardARef, cardBRef: this.cardBRef,
+      preloaderRef: this.preloaderRef, loadBarRef: this.loadBarRef, loopFadeRef: this.loopFadeRef,
+      diveOverlayRef: this.diveOverlayRef, diveScrollRef: this.diveScrollRef,
+      diveVideoRef: this.diveVideoRef, thirdVideoRef: this.thirdVideoRef,
+      vid4Ref: this.vid4Ref, vid5Ref: this.vid5Ref, vid6Ref: this.vid6Ref,
+      diveProgressRef: this.diveProgressRef, diveNumRef: this.diveNumRef,
+      diveLabelRef: this.diveLabelRef, diveBodyRef: this.diveBodyRef, divePctRef: this.divePctRef,
+      diveCueRef: this.diveCueRef, approachRef: this.approachRef,
+      panelARef: this.panelARef, panelBRef: this.panelBRef,
+      panelAContentRef: this.panelAContentRef, panelBContentRef: this.panelBContentRef,
+      enterDive: this.enterDive, exitDive: this.exitDive,
+      openPanelA: this.openPanelA, openPanelB: this.openPanelB, closePanel: this.closePanel,
+    };
+  }
+}
+</script>
+</body>
+</html>
